@@ -97,12 +97,14 @@
         /// <param name="rectWidth">Размер ножки.</param>
         /// <param name="tableLength">Длина столика.</param>
         /// <param name="tableWidth">Ширина столика.</param>
+        /// <param name="wheelSize">Размер колесика.</param>
         public void CreateTable(
             double rectX,
             double rectY,
             double rectWidth,
             double tableLength,
-            double tableWidth)
+            double tableWidth,
+            double wheelSize)
         {
             var halfValue = 2;
             var sketchTuple = CreateSketch((short)Obj3dType.o3d_planeXOY);
@@ -136,6 +138,17 @@
             MirrorOperation(createdPart, mirrorEntity, planeYoz);
 
             CreateTop(rectX, rectY, rectWidth, tableLength, tableWidth);
+
+            if (wheelSize != 0)
+            {
+                CreateWheels(
+                    rectX,
+                    rectWidth,
+                    wheelSize,
+                    rectWidth,
+                    planeOffset,
+                    planeYoz);
+            }
         }
 
         /// <summary>
@@ -148,6 +161,7 @@
         /// <param name="shelfLength">Длина полки.</param>
         /// <param name="shelfWidth">Ширина полки.</param>
         /// <param name="legSize">Размер ножки.</param>
+        /// <param name="bracingSize">Размер крепления.</param>
         public void CreateShelf(
             double rectX,
             double rectY,
@@ -155,17 +169,20 @@
             double tableLength,
             double shelfLength,
             double shelfWidth,
-            double legSize)
+            double legSize,
+            double bracingSize)
         {
+            var halfValue = 2;
             var document3D = (ksDocument3D)_kompasObject.ActiveDocument3D();
             var part = (ksPart)document3D.GetPart((short)Part_Type.pTop_Part);
             var sketch = (ksEntity)part.NewEntity((short)Obj3dType.o3d_sketch);
             var ksSketchDefinition = (ksSketchDefinition)sketch.GetDefinition();
-            var plane = (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ);
+            var planeXoz = (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ);
+            var planeXoy = (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeXOY);
             var offsetPlane = CreateOffsetPlane(
                 part,
-                plane,
-                (tableLength + legSize - shelfLength) / 2);
+                planeXoz,
+                (tableLength + legSize - shelfLength) / halfValue);
 
             ksSketchDefinition.SetPlane(offsetPlane);
             sketch.Create();
@@ -179,6 +196,17 @@
             ksSketchTopDefinition.EndEdit();
 
             ExtrudeOperation(part, sketch, shelfLength);
+
+            CreateBracings(
+                part,
+                planeXoy,
+                offsetPlane,
+                rectX,
+                rectY,
+                tableLength,
+                shelfLength,
+                legSize,
+                bracingSize);
         }
 
         /// <summary>
@@ -206,6 +234,22 @@
             rectangleParam.height = rectHeight;
             rectangleParam.style = 1;
             document2D.ksRectangle(rectangleParam, 0);
+        }
+
+        /// <summary>
+        /// Строит окружность.
+        /// </summary>
+        /// <param name="centerX">Координата центра окружности по оси X.</param>
+        /// <param name="centerY">Координата центра окружности по оси Y.</param>
+        /// <param name="radius">Радиус окружности.</param>
+        private static void CreateCircle(
+            double centerX,
+            double centerY,
+            double radius)
+        {
+            var document2D = (ksDocument2D)_kompasObject.ActiveDocument2D();
+
+            document2D.ksCircle(centerX, centerY, radius, 1);
         }
 
         /// <summary>
@@ -302,6 +346,119 @@
             ksSketchTopDefinition.EndEdit();
 
             ExtrudeOperation(createdPartTop, createdSketchTop, tableLength);
+        }
+
+        /// <summary>
+        /// Строит колесики.
+        /// </summary>
+        /// <param name="rectX">Координата X начала построения.</param>
+        /// <param name="rectWidth">Размер ножки.</param>
+        /// <param name="wheelSize">Размер колесика.</param>
+        /// <param name="depth">Глубина выдавливания.</param>
+        /// <param name="xozMirrorPlane">Плоскость XOZ для зеркального отображения.</param>
+        /// <param name="yozMirrorPlane">Плоскость YOZ для зеркального отображения.</param>
+        private void CreateWheels(
+            double rectX,
+            double rectWidth,
+            double wheelSize,
+            double depth,
+            ksEntity xozMirrorPlane,
+            ksEntity yozMirrorPlane)
+        {
+            var document3D = (ksDocument3D)_kompasObject.ActiveDocument3D();
+            var part = (ksPart)document3D.GetPart((short)Part_Type.pTop_Part);
+            var planeXoz =
+                (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeXOZ);
+
+            var sketchWheels = (ksEntity)part.NewEntity((short)Obj3dType.o3d_sketch);
+            var ksSketchWheelsDefinition = (ksSketchDefinition)sketchWheels.GetDefinition();
+
+            ksSketchWheelsDefinition.SetPlane(planeXoz);
+            sketchWheels.Create();
+            ksSketchWheelsDefinition.BeginEdit();
+
+            CreateCircle(rectX + (rectWidth / 2), wheelSize, wheelSize);
+
+            ksSketchWheelsDefinition.EndEdit();
+
+            var extrude = ExtrudeOperation(
+                part,
+                sketchWheels,
+                depth);
+
+            MirrorOperation(part, extrude, yozMirrorPlane);
+
+            var mirrorEntity = MirrorOperation(part, extrude, xozMirrorPlane);
+
+            MirrorOperation(part, mirrorEntity, yozMirrorPlane);
+        }
+
+        /// <summary>
+        /// Строит крепления для полки.
+        /// </summary>
+        /// <param name="part">Объект детали.</param>
+        /// <param name="plane">Плоскость для создания смещенной плоскости.</param>
+        /// <param name="offsetPlane">Смещенная плоскость.</param>
+        /// <param name="rectX">Координата X для построения креплений.</param>
+        /// <param name="rectY">Координата X для выдавливания и смещенной плоскости.</param>
+        /// <param name="tableLength">Длина столика.</param>
+        /// <param name="shelfLength">Длина полки.</param>
+        /// <param name="legSize">Размер ножки.</param>
+        /// <param name="bracingSize">Размер крепления.</param>
+        private void CreateBracings(
+            ksPart part,
+            ksEntity plane,
+            ksEntity offsetPlane,
+            double rectX,
+            double rectY,
+            double tableLength,
+            double shelfLength,
+            double legSize,
+            double bracingSize)
+        {
+            var halfValue = 2;
+            var bracingSketch = (ksEntity)part.NewEntity((short)Obj3dType.o3d_sketch);
+            var ksBracingSketchDefinition = (ksSketchDefinition)bracingSketch.GetDefinition();
+            var braceOffsetPlane = CreateOffsetPlane(
+                part,
+                plane,
+                rectY);
+            ksBracingSketchDefinition.SetPlane(braceOffsetPlane);
+            bracingSketch.Create();
+            ksBracingSketchDefinition.BeginEdit();
+
+            var ksBraceSketchDefinition =
+                (ksSketchDefinition)bracingSketch.GetDefinition();
+            var planeYoz =
+                (ksEntity)part.GetDefaultEntity((short)Obj3dType.o3d_planeYOZ);
+
+            CreateRectangle(
+                -rectX,
+                (tableLength + legSize - shelfLength) / halfValue,
+                bracingSize,
+                bracingSize);
+
+            ksBracingSketchDefinition.EndEdit();
+            ksBraceSketchDefinition.EndEdit();
+
+            var extrude = ExtrudeOperation(
+                part,
+                bracingSketch,
+                rectY);
+            var extrudeDefinition = (ksBossExtrusionDefinition)extrude.GetDefinition();
+            extrudeDefinition.SetSideParam(true, 1);
+            extrude.Create();
+
+            MirrorOperation(part, extrude, planeYoz);
+
+            var planeOffset =
+                CreateOffsetPlane(
+                    part,
+                    offsetPlane,
+                    shelfLength / halfValue);
+            var mirrorEntity = MirrorOperation(part, extrude, planeOffset);
+
+            MirrorOperation(part, mirrorEntity, planeYoz);
         }
     }
 }

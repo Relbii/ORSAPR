@@ -61,6 +61,14 @@
             this.ShelfHeightExceptionLabel = new System.Windows.Forms.Label();
             this.SupportSizeExceptionLabel = new System.Windows.Forms.Label();
             this.ShelfFloorDistanceExceptionLabel = new System.Windows.Forms.Label();
+            this.BracingSizeLabel = new System.Windows.Forms.Label();
+            this.BracingSizeTextBox = new System.Windows.Forms.TextBox();
+            this.BracingSizeRangeLabel = new System.Windows.Forms.Label();
+            this.BracingSizeExceptionLabel = new System.Windows.Forms.Label();
+            this.WheelSizeLabel = new System.Windows.Forms.Label();
+            this.WheelSizeTextBox = new System.Windows.Forms.TextBox();
+            this.WheelSizeRangeLabel = new System.Windows.Forms.Label();
+            this.WheelSizeExceptionLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // TableLengthLabel
@@ -313,7 +321,7 @@
             // 
             // TableBuildButton
             // 
-            this.TableBuildButton.Location = new System.Drawing.Point(140, 371);
+            this.TableBuildButton.Location = new System.Drawing.Point(140, 445);
             this.TableBuildButton.Name = "TableBuildButton";
             this.TableBuildButton.Padding = new System.Windows.Forms.Padding(5);
             this.TableBuildButton.Size = new System.Drawing.Size(136, 40);
@@ -402,10 +410,100 @@
             this.ShelfFloorDistanceExceptionLabel.Size = new System.Drawing.Size(0, 13);
             this.ShelfFloorDistanceExceptionLabel.TabIndex = 32;
             // 
+            // BracingSizeLabel
+            // 
+            this.BracingSizeLabel.AutoSize = true;
+            this.BracingSizeLabel.Location = new System.Drawing.Point(24, 366);
+            this.BracingSizeLabel.Margin = new System.Windows.Forms.Padding(10, 10, 10, 30);
+            this.BracingSizeLabel.Name = "BracingSizeLabel";
+            this.BracingSizeLabel.Size = new System.Drawing.Size(103, 26);
+            this.BracingSizeLabel.TabIndex = 33;
+            this.BracingSizeLabel.Text = "Размер креплений\r\nдля полки:";
+            // 
+            // BracingSizeTextBox
+            // 
+            this.BracingSizeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.BracingSizeTextBox.Location = new System.Drawing.Point(140, 364);
+            this.BracingSizeTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
+            this.BracingSizeTextBox.Name = "BracingSizeTextBox";
+            this.BracingSizeTextBox.Size = new System.Drawing.Size(100, 20);
+            this.BracingSizeTextBox.TabIndex = 34;
+            this.BracingSizeTextBox.Text = "30";
+            this.BracingSizeTextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
+            // 
+            // BracingSizeRangeLabel
+            // 
+            this.BracingSizeRangeLabel.AutoSize = true;
+            this.BracingSizeRangeLabel.Location = new System.Drawing.Point(246, 366);
+            this.BracingSizeRangeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 30);
+            this.BracingSizeRangeLabel.Name = "BracingSizeRangeLabel";
+            this.BracingSizeRangeLabel.Size = new System.Drawing.Size(62, 13);
+            this.BracingSizeRangeLabel.TabIndex = 35;
+            this.BracingSizeRangeLabel.Text = "20 - 45 мм.";
+            // 
+            // BracingSizeExceptionLabel
+            // 
+            this.BracingSizeExceptionLabel.AutoSize = true;
+            this.BracingSizeExceptionLabel.BackColor = System.Drawing.Color.LightPink;
+            this.BracingSizeExceptionLabel.Location = new System.Drawing.Point(321, 366);
+            this.BracingSizeExceptionLabel.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+            this.BracingSizeExceptionLabel.Name = "BracingSizeExceptionLabel";
+            this.BracingSizeExceptionLabel.Size = new System.Drawing.Size(0, 13);
+            this.BracingSizeExceptionLabel.TabIndex = 36;
+            // 
+            // WheelSizeLabel
+            // 
+            this.WheelSizeLabel.AutoSize = true;
+            this.WheelSizeLabel.Location = new System.Drawing.Point(21, 408);
+            this.WheelSizeLabel.Margin = new System.Windows.Forms.Padding(10, 10, 10, 30);
+            this.WheelSizeLabel.Name = "WheelSizeLabel";
+            this.WheelSizeLabel.Size = new System.Drawing.Size(106, 13);
+            this.WheelSizeLabel.TabIndex = 37;
+            this.WheelSizeLabel.Text = "Размер колесиков:\r\n";
+            // 
+            // WheelSizeTextBox
+            // 
+            this.WheelSizeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.WheelSizeTextBox.Location = new System.Drawing.Point(140, 406);
+            this.WheelSizeTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
+            this.WheelSizeTextBox.Name = "WheelSizeTextBox";
+            this.WheelSizeTextBox.Size = new System.Drawing.Size(100, 20);
+            this.WheelSizeTextBox.TabIndex = 38;
+            this.WheelSizeTextBox.Text = "0";
+            this.WheelSizeTextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
+            // 
+            // WheelSizeRangeLabel
+            // 
+            this.WheelSizeRangeLabel.AutoSize = true;
+            this.WheelSizeRangeLabel.Location = new System.Drawing.Point(246, 409);
+            this.WheelSizeRangeLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 30);
+            this.WheelSizeRangeLabel.Name = "WheelSizeRangeLabel";
+            this.WheelSizeRangeLabel.Size = new System.Drawing.Size(56, 13);
+            this.WheelSizeRangeLabel.TabIndex = 39;
+            this.WheelSizeRangeLabel.Text = "0 - 70 мм.";
+            // 
+            // WheelSizeExceptionLabel
+            // 
+            this.WheelSizeExceptionLabel.AutoSize = true;
+            this.WheelSizeExceptionLabel.BackColor = System.Drawing.Color.LightPink;
+            this.WheelSizeExceptionLabel.Location = new System.Drawing.Point(315, 409);
+            this.WheelSizeExceptionLabel.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+            this.WheelSizeExceptionLabel.Name = "WheelSizeExceptionLabel";
+            this.WheelSizeExceptionLabel.Size = new System.Drawing.Size(0, 13);
+            this.WheelSizeExceptionLabel.TabIndex = 40;
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(682, 426);
+            this.ClientSize = new System.Drawing.Size(682, 497);
+            this.Controls.Add(this.WheelSizeExceptionLabel);
+            this.Controls.Add(this.WheelSizeRangeLabel);
+            this.Controls.Add(this.WheelSizeTextBox);
+            this.Controls.Add(this.WheelSizeLabel);
+            this.Controls.Add(this.BracingSizeExceptionLabel);
+            this.Controls.Add(this.BracingSizeRangeLabel);
+            this.Controls.Add(this.BracingSizeTextBox);
+            this.Controls.Add(this.BracingSizeLabel);
             this.Controls.Add(this.ShelfFloorDistanceExceptionLabel);
             this.Controls.Add(this.SupportSizeExceptionLabel);
             this.Controls.Add(this.ShelfHeightExceptionLabel);
@@ -486,6 +584,14 @@
         private System.Windows.Forms.Label ShelfHeightExceptionLabel;
         private System.Windows.Forms.Label SupportSizeExceptionLabel;
         private System.Windows.Forms.Label ShelfFloorDistanceExceptionLabel;
+        private System.Windows.Forms.Label BracingSizeLabel;
+        private System.Windows.Forms.TextBox BracingSizeTextBox;
+        private System.Windows.Forms.Label BracingSizeRangeLabel;
+        private System.Windows.Forms.Label BracingSizeExceptionLabel;
+        private System.Windows.Forms.Label WheelSizeLabel;
+        private System.Windows.Forms.TextBox WheelSizeTextBox;
+        private System.Windows.Forms.Label WheelSizeRangeLabel;
+        private System.Windows.Forms.Label WheelSizeExceptionLabel;
     }
 }
 

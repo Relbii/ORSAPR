@@ -49,14 +49,17 @@
                 parameters.ParamsDictionary[ParameterType.ParamType.TableHeight].Value;
             var supportSize =
                 parameters.ParamsDictionary[ParameterType.ParamType.SupportSize].Value;
+            var wheelSize =
+                parameters.ParamsDictionary[ParameterType.ParamType.WheelSize].Value;
 
             _wrapper.CreateTable(
-               (tableWidth / (HalfValue * ConvertMillimeters)) -
-               (supportSize / ConvertMillimeters),
-               tableHeight / ConvertMillimeters,
-               supportSize / ConvertMillimeters,
-               tableLength / ConvertMillimeters,
-               tableWidth / ConvertMillimeters);
+                (tableWidth / (HalfValue * ConvertMillimeters)) -
+                (supportSize / ConvertMillimeters),
+                tableHeight / ConvertMillimeters,
+                supportSize / ConvertMillimeters,
+                tableLength / ConvertMillimeters,
+                tableWidth / ConvertMillimeters,
+                wheelSize / ConvertMillimeters);
         }
 
         /// <summary>
@@ -79,6 +82,8 @@
                 parameters.ParamsDictionary[ParameterType.ParamType.ShelfFloorDistance].Value;
             var supportSize =
                 parameters.ParamsDictionary[ParameterType.ParamType.SupportSize].Value;
+            var bracingSize =
+                parameters.ParamsDictionary[ParameterType.ParamType.BracingSize].Value;
 
             _wrapper.CreateShelf(
                 shelfWidth / (HalfValue * ConvertMillimeters),
@@ -87,7 +92,8 @@
                 (tableLength - supportLength) / ConvertMillimeters,
                 shelfLength / ConvertMillimeters,
                 shelfWidth / ConvertMillimeters,
-                supportSize / ConvertMillimeters);
+                supportSize / ConvertMillimeters,
+                bracingSize / ConvertMillimeters);
         }
     }
 }
