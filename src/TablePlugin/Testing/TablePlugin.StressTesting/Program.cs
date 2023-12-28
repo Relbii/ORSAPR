@@ -14,36 +14,42 @@
         {
             var builder = new TableBuilder();
             var stopWatch = new Stopwatch();
-            stopWatch.Start();
             var parameters = new Parameters();
             parameters.ParamsDictionary = new Dictionary<ParameterType.ParamType, Parameter>()
             {
-                { ParameterType.ParamType.TableLength, new Parameter(1200, 600, 1200) },
-                { ParameterType.ParamType.TableWidth, new Parameter(1200, 600, 1200) },
-                { ParameterType.ParamType.TableHeight, new Parameter(500, 400, 500) },
-                { ParameterType.ParamType.ShelfLength, new Parameter(1100, 300, 1100) },
-                { ParameterType.ParamType.ShelfWidth, new Parameter(1100, 300, 1100) },
-                { ParameterType.ParamType.ShelfHeight, new Parameter(40, 10, 40) },
-                { ParameterType.ParamType.SupportSize, new Parameter(50, 30, 50) },
-                { ParameterType.ParamType.ShelfFloorDistance, new Parameter(360, 30, 360) },
-                { ParameterType.ParamType.BracingSize, new Parameter(45, 20, 45) },
-                { ParameterType.ParamType.WheelSize, new Parameter(70, 0, 70) },
+                { ParameterType.ParamType.TableLength, new Parameter(800, 600, 1200) },
+                { ParameterType.ParamType.TableWidth, new Parameter(800, 600, 1200) },
+                { ParameterType.ParamType.TableHeight, new Parameter(450, 400, 500) },
+                { ParameterType.ParamType.ShelfLength, new Parameter(700, 300, 1100) },
+                { ParameterType.ParamType.ShelfWidth, new Parameter(700, 300, 1100) },
+                { ParameterType.ParamType.ShelfHeight, new Parameter(25, 10, 40) },
+                { ParameterType.ParamType.SupportSize, new Parameter(40, 30, 50) },
+                { ParameterType.ParamType.ShelfFloorDistance, new Parameter(150, 30, 360) },
+                { ParameterType.ParamType.BracingSize, new Parameter(30, 20, 45) },
+                { ParameterType.ParamType.WheelSize, new Parameter(0, 0, 70) },
             };
             var streamWriter = new StreamWriter($"log.txt", true);
-            Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+            Process currentProcess = Process.GetCurrentProcess();
             var count = 0;
 
-            while (true)
-            {
-                const double gigabyteInByte = 0.000000000931322574615478515625;
+            while (count < 51)
+            { 
+                const double gigabyteInByte = 0.000000000931322574615478515625; 
+                stopWatch.Start();
                 builder.Build(parameters);
-                var computerInfo = new ComputerInfo();
-                var usedMemory = (computerInfo.TotalPhysicalMemory - computerInfo.AvailablePhysicalMemory) * gigabyteInByte;
-                streamWriter.WriteLine($"{++count}\t{stopWatch.Elapsed:hh\\:mm\\:ss}\t{usedMemory}");
+                stopWatch.Stop();
+
+                var computerInfo = new ComputerInfo(); 
+                var usedMemory = (computerInfo.TotalPhysicalMemory
+                    - computerInfo.AvailablePhysicalMemory)
+                    * gigabyteInByte;
+                 
+                streamWriter.WriteLine(
+                    $"{++count}\t{stopWatch.Elapsed:hh\\:mm\\:ss}\t{usedMemory}"); 
                 streamWriter.Flush();
+                stopWatch.Reset();
             }
 
-            stopWatch.Stop();
             streamWriter.Close();
             streamWriter.Dispose();
             Console.Write($"End {new ComputerInfo().TotalPhysicalMemory}");
